@@ -1,0 +1,18 @@
+{
+    "languages": {
+        "python": {
+            "template": "print('Hello, World!')\n{{FRAMEWORK_CODE}}"
+        },
+        "javascript": {
+            "template": "console.log('Hello, World!');\n{{FRAMEWORK_CODE}}"
+        },
+        "java": {
+            "template": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}{{FRAMEWORK_CODE}}"
+        }
+    },
+    "frameworks": {
+        "flask": "from flask import Flask\napp = Flask(__name__)\n@app.route('/')\ndef home():\n    return 'Hello from Flask!'\n\nif __name__ == '__main__':\n    app.run()",
+        "express": "const express = require('express');\nconst app = express();\napp.get('/', (req, res) => res.send('Hello from Express!'));\napp.listen(3000, () => console.log('Server running on port 3000'));",
+        "spring": "import org.springframework.boot.*;\nimport org.springframework.boot.autoconfigure.*;\nimport org.springframework.web.bind.annotation.*;\n\n@RestController\n@SpringBootApplication\npublic class Main {\n    @RequestMapping(\"/\")\n    String home() {\n        return \"Hello from Spring Boot!\";\n    }\n\n    public static void main(String[] args) {\n        SpringApplication.run(Main.class, args);\n    }\n}"
+    }
+}

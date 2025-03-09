@@ -1,0 +1,41 @@
+from flask import Flask, request, jsonify
+import json
+
+app = Flask(__name__)
+
+# Load codex.json
+def load_codex():
+    with open("codex.json", "r") as file:
+        return json.load(file)
+
+# Generate code dynamically
+@app.route("/generate", methods=["POST"])
+def generate():
+    data = request.get_json()
+    language = data.get("language", "python")
+    framework = data.get("framework", "none")
+
+    codex = load_codex()
+    
+    # Validate language
+    if language not in codex["languages"]:
+        return jsonify({"error": f"Language '{language}' not supported."})
+    
+    # Validate framework
+    if framework != "none" and framework not in codex["frameworks"]:
+        return jsonify({"error": f"Framework '{framework}' not supported."})
+
+    # Get template
+    template = codex["languages"][language]["template"]
+    
+    # Add framework-specific code if needed
+    if framework in codex["frameworks"]:
+        framework_code = codex["frameworks"][framework]
+        template = template.replace("{{FRAMEWORK_CODE}}", framework_code)
+    else:
+        template = template.replace("{{FRAMEWORK_CODE}}", "")
+
+    return jsonify({"generated_code": template})
+
+if __name__ == "__main__":
+    app.run(debug=True)
